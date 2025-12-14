@@ -1,0 +1,27 @@
+{
+  "hlsl.preprocessorDefinitions": {
+    "UE_BUILD_DEVELOPMENT": 1,
+    "PLATFORM_WINDOWS": 1,
+    "WITH_EDITOR": 1,
+    "USE_PIX": 1,
+    "r.DefaultFeature.AutoExposure": 1,
+    "r.DefaultFeature.AmbientOcclusion": 1,
+    "r.DefaultFeature.MotionBlur": 0,
+    "r.DefaultFeature.Bloom": 1
+  },
+  "hlsl.additionalIncludeDirectories": [
+    "E:\\Epic\\Unreal Engine\\v5.6\\UE_5.6\\Engine\\Shaders",
+    "E:\\Epic\\Unreal Engine\\v5.6\\UE_5.6\\Engine\\Shaders\\Private",
+    "E:\\Epic\\Unreal Engine\\v5.6\\UE_5.6\\Engine\\Source\\Runtime\\Renderer",
+    "E:\\Epic\\Unreal Engine\\v5.6\\UE_5.6\\Engine\\Source\\Runtime\\Renderer\\Private",
+    "$(ProjectDir)\\Shaders",
+    "$(ProjectDir)\\Source"
+  ],
+  "hlsl.virtualDirectoryMappings": {
+    "/Engine": "E:\\Epic\\Unreal Engine\\v5.6\\UE_5.6\\Engine\\Shaders",
+    "/Project": "$(ProjectDir)\\Shaders",
+    "/Runtime": "E:\\Epic\\Unreal Engine\\v5.6\\UE_5.6\\Engine\\Source\\Runtime",
+    "/Plugin": "$(ProjectDir)\\Plugins"
+  },
+  "root": true
+}
