@@ -1,9 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "MyFPSHUD.h"
 #include "Engine/Canvas.h"
 #include "Engine/Texture2D.h"
 #include "CanvasItem.h"
+#include "Blueprint/UserWidget.h"
 
 AMyFPSHUD::AMyFPSHUD()
 {
@@ -12,6 +11,19 @@ AMyFPSHUD::AMyFPSHUD()
 void AMyFPSHUD::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 如果我们在蓝图里配置了 Widget 类，就在这里创建它
+	if (MainHUDWidgetClass)
+	{
+		// 1. 创建 Widget
+		MainHUDWidget = CreateWidget<UUserWidget>(GetWorld(), MainHUDWidgetClass);
+		
+		// 2. 添加到视口（Viewport）
+		if (MainHUDWidget)
+		{
+			MainHUDWidget->AddToViewport();
+		}
+	}
 }
 
 void AMyFPSHUD::DrawHUD()

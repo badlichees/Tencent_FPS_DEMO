@@ -15,4 +15,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;  // ← 关键！override
+	
+	/** 测试用：每秒加分 */
+	void TestAddScore();
+	
+	FTimerHandle TimerHandle_TestScore;
 };

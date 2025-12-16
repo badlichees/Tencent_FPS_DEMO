@@ -30,4 +30,8 @@ public:
 	/** 获取当前分数 */
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	float GetFPSScore() const { return CurrentScore; }
+
+	/** 获取格式化后的分数文本 (UI专用) */
+	UFUNCTION(BlueprintPure, Category = "Score")
+	FString GetFPSScoreText() const;
 };
