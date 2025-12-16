@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameStateBase.h"
+#include "GameFramework/GameState.h"
 #include "MyFPSGameState.generated.h"
 
 /**
@@ -10,7 +10,7 @@
  * 使用 "My" 前缀以区分（或扩展）默认的模版逻辑。
  */
 UCLASS()
-class FPS_API AMyFPSGameState : public AGameStateBase
+class FPS_API AMyFPSGameState : public AGameState
 {
 	GENERATED_BODY()
 	
