@@ -15,7 +15,7 @@ AMyFPSGameMode::AMyFPSGameMode()
 	// 设置默认PlayerController类
 	PlayerControllerClass = AMyFPSPlayerController::StaticClass();
 
-	// 设置默认HUD CLass（后添加UI用）
+	// 设置默认HUD CLass（添加UI用）
 	HUDClass = AMyFPSHUD::StaticClass();
 
 	// 使用自定义的GameState和PlayerState

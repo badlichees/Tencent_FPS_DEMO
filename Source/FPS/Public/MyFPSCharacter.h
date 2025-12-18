@@ -16,5 +16,26 @@ class FPS_API AMyFPSCharacter : public AFPSCharacter
 
 public:
 	AMyFPSCharacter();
-	
+
+protected:
+	/** Fire Input Action */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputAction* FireAction;
+
+	/** 射程 */
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float WeaponRange = 5000.0f;
+
+	/** 鼠标灵敏度 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	float MouseSensitivity = 1.0f;
+
+	/** 攻击逻辑 */
+	virtual void DoFire();
+
+	/** 重写转向逻辑以应用灵敏度 */
+	virtual void DoAim(float Yaw, float Pitch) override;
+
+	/** 绑定输入 */
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

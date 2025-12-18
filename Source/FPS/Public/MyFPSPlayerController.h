@@ -15,4 +15,7 @@ class FPS_API AMyFPSPlayerController : public AFPSPlayerController
 	
 public:
 	AMyFPSPlayerController();
+
+protected:
+	virtual void BeginPlay() override;
 };

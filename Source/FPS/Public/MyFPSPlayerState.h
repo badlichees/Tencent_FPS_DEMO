@@ -17,11 +17,6 @@ class FPS_API AMyFPSPlayerState : public APlayerState
 public:
 	AMyFPSPlayerState();
 
-protected:
-	/** 玩家当前分数 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Score")
-	float CurrentScore;
-
 public:
 	/** 增加分数的函数 */
 	UFUNCTION(BlueprintCallable, Category = "Score")
@@ -29,7 +24,7 @@ public:
 
 	/** 获取当前分数 */
 	UFUNCTION(BlueprintCallable, Category = "Score")
-	float GetFPSScore() const { return CurrentScore; }
+	float GetFPSScore() const { return GetScore(); }
 
 	/** 获取格式化后的分数文本 (UI专用) */
 	UFUNCTION(BlueprintPure, Category = "Score")
