@@ -19,6 +19,7 @@ public class FPS : ModuleRules
 			"GameplayStateTreeModule",
 			"UMG",
 			"Slate",
+			"Niagara",
 
 			// 添加对其他子模块的依赖（暂时放入备份文件夹解决循环依赖问题）
             //"FPSNet",

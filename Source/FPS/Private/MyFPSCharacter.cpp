@@ -2,11 +2,65 @@
 #include "EnhancedInputComponent.h"
 #include "DrawDebugHelpers.h"
 #include "FPS.h"
-#include "FpTarget.h"
+#include "MyWeapon.h"
+#include "Net/UnrealNetwork.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AMyFPSCharacter::AMyFPSCharacter()
 {
-	// 构造函数
+	// 启用 Tick 以更新动画数据
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AMyFPSCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	// 1. 更新速度 (只要水平速度)
+	FVector Velocity = GetVelocity();
+	Velocity.Z = 0;
+	MovementSpeed = Velocity.Size();
+
+	// 2. 更新跳跃状态
+	if (GetCharacterMovement())
+	{
+		bIsFalling = GetCharacterMovement()->IsFalling();
+	}
+}
+
+void AMyFPSCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 只在服务器生成武器并同步给客户端
+	if (GetLocalRole() == ROLE_Authority && DefaultWeaponClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		CurrentWeapon = GetWorld()->SpawnActor<AMyWeapon>(DefaultWeaponClass, SpawnParams);
+		if (CurrentWeapon)
+		{
+			// 将武器附加到角色的第一人称手臂上
+			// 使用现有的 HandGrip_R 插槽
+			CurrentWeapon->AttachToComponent(GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("HandGrip_R"));
+		
+			// [姿态优化] 链接武器的动画叠加层
+			if (CurrentWeapon->WeaponAnimLayer)
+			{
+				GetFirstPersonMesh()->LinkAnimClassLayers(CurrentWeapon->WeaponAnimLayer);
+			}
+		}
+	}
+}
+
+void AMyFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// 同步当前武器指针
+	DOREPLIFETIME(AMyFPSCharacter, CurrentWeapon);
 }
 
 void AMyFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -35,44 +89,14 @@ void AMyFPSCharacter::DoAim(float Yaw, float Pitch)
 
 void AMyFPSCharacter::DoFire()
 {
-	// 1. 获取相机位置和方向
-	FVector CameraLocation;
-	FRotator CameraRotation;
-	GetActorEyesViewPoint(CameraLocation, CameraRotation);
+	// 通知服务器开火
+	ServerDoFire();
+}
 
-	// 2. 计算射线终点
-	FVector EndLocation = CameraLocation + (CameraRotation.Vector() * WeaponRange);
-
-	// 3. 射线检测参数
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this); // 忽略自己
-
-	// 4. 执行射线检测
-	FHitResult Hit;
-	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, EndLocation, ECC_Visibility, QueryParams);
-
-	// 5. 处理结果
-	if (bHit)
+void AMyFPSCharacter::ServerDoFire_Implementation()
+{
+	if (CurrentWeapon)
 	{
-		// 画一个红点在击中位置 (调试用)
-		DrawDebugPoint(GetWorld(), Hit.Location, 10.0f, FColor::Red, false, 2.0f);
-		
-		AActor* HitActor = Hit.GetActor();
-		if (HitActor)
-		{
-			UE_LOG(LogFPS, Log, TEXT("Hit Actor: %s"), *HitActor->GetName());
-			
-			// 尝试将击中物体转换为靶子类
-			if (AFpTarget* Target = Cast<AFpTarget>(HitActor))
-			{
-				// 如果是靶子，就让它处理“被击中”的逻辑 (加分、自毁)
-				Target->HandleHit(this);
-			}
-		}
-	}
-	else
-	{
-		// 没打中，画一条线表示弹道
-		DrawDebugLine(GetWorld(), CameraLocation, EndLocation, FColor::Yellow, false, 2.0f);
+		CurrentWeapon->Fire(this);
 	}
 }
