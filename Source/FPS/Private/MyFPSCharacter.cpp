@@ -42,11 +42,11 @@ void AMyFPSCharacter::BeginPlay()
 		CurrentWeapon = GetWorld()->SpawnActor<AMyWeapon>(DefaultWeaponClass, SpawnParams);
 		if (CurrentWeapon)
 		{
-			// 将武器附加到角色的第一人称手臂上
-			// 使用现有的 HandGrip_R 插槽
-			CurrentWeapon->AttachToComponent(GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("HandGrip_R"));
+			// 标准架构：将武器附加到角色的第一人称手臂上
+			// 使用动态配置的插槽名称
+			CurrentWeapon->AttachToComponent(GetFirstPersonMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocketName);
 		
-			// [姿态优化] 链接武器的动画叠加层
+			// [姿态优化] 链接武器的动画叠加层到手臂
 			if (CurrentWeapon->WeaponAnimLayer)
 			{
 				GetFirstPersonMesh()->LinkAnimClassLayers(CurrentWeapon->WeaponAnimLayer);
@@ -75,6 +75,25 @@ void AMyFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AMyFPSCharacter::DoFire);
 		}
 	}
+}
+
+void AMyFPSCharacter::DoMove(float Right, float Forward)
+{
+	if (GetController())
+	{
+		AddMovementInput(GetActorRightVector(), Right);
+		AddMovementInput(GetActorForwardVector(), Forward);
+	}
+}
+
+void AMyFPSCharacter::DoJumpStart()
+{
+	Jump();
+}
+
+void AMyFPSCharacter::DoJumpEnd()
+{
+	StopJumping();
 }
 
 void AMyFPSCharacter::DoAim(float Yaw, float Pitch)

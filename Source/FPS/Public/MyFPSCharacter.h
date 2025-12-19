@@ -20,6 +20,20 @@ public:
 	/** 重写 BeginPlay 以在服务器生成武器 */
 	virtual void BeginPlay() override;
 
+	/** 执行移动 (父类已声明为 BlueprintCallable) */
+	virtual void DoMove(float Right, float Forward);
+
+	/** 执行瞄准转向 (父类已声明为 BlueprintCallable) */
+	virtual void DoAim(float Yaw, float Pitch) override;
+
+	/** 执行跳跃 (父类已声明为 BlueprintCallable) */
+	virtual void DoJumpStart();
+	virtual void DoJumpEnd();
+
+	/** 执行开火请求 (子类新增接口) */
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	virtual void DoFire();
+
 protected:
 	/** 默认武器类 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
@@ -29,6 +43,10 @@ protected:
 	UPROPERTY(Replicated)
 	class AMyWeapon* CurrentWeapon;
 
+	/** 武器挂载的插槽名称 */
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	FName WeaponSocketName = TEXT("GripPoint");
+
 	/** Fire Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputAction* FireAction;
@@ -37,15 +55,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	float MouseSensitivity = 1.0f;
 
-	/** 执行开火请求 (客户端发起) */
-	virtual void DoFire();
-
 	/** 权威服务器开火逻辑 */
 	UFUNCTION(Server, Reliable)
 	void ServerDoFire();
 
-	/** 重写转向逻辑以应用灵敏度 */
-	virtual void DoAim(float Yaw, float Pitch) override;
+	/** [动画同步] 角色当前移动速度 */
 
 	/** [动画同步] 角色当前移动速度 */
 	UPROPERTY(BlueprintReadOnly, Category = "Animation")
