@@ -50,14 +50,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Weapon")
 	TSubclassOf<AShooterWeapon> WeaponClass;
 
-	/** 第一人称网格体武器插槽的名称 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Weapons")
-	FName FirstPersonWeaponSocket = FName("HandGrip_R");
-
-	/** 第三人称网格体武器插槽的名称 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Weapons")
-	FName ThirdPersonWeaponSocket = FName("HandGrip_R");
-
 	/** 瞄准计算的最大范围 */
 	UPROPERTY(EditAnywhere, Category="Aim")
 	float AimRange = 10000.0f;

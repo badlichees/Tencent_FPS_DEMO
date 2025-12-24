@@ -37,14 +37,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category ="Input")
 	UInputAction* SwitchWeaponAction;
 
-	/** 第一人称网格体武器插槽名称 */
-	UPROPERTY(EditAnywhere, Category ="Weapons")
-	FName FirstPersonWeaponSocket = FName("HandGrip_R");
-
-	/** 第三人称网格体武器插槽名称 */
-	UPROPERTY(EditAnywhere, Category ="Weapons")
-	FName ThirdPersonWeaponSocket = FName("HandGrip_R");
-
 	/** 用于瞄准追踪的最大距离 */
 	UPROPERTY(EditAnywhere, Category ="Aim", meta = (ClampMin = 0, ClampMax = 100000, Units = "cm"))
 	float MaxAimDistance = 10000.0f;

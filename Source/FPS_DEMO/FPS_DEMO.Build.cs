@@ -18,13 +18,19 @@ public class FPS_DEMO : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
+			"Slate",
+			"Niagara"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"FPS_DEMO",
+			"FPS_DEMO/Public",
+			"FPS_DEMO/Public/Core",
+			"FPS_DEMO/Public/Weapons",
+			"FPS_DEMO/Public/Interfaces",
+			"FPS_DEMO/Public/Pickups",
 			"FPS_DEMO/Variant_Shooter",
 			"FPS_DEMO/Variant_Shooter/AI",
 			"FPS_DEMO/Variant_Shooter/UI",

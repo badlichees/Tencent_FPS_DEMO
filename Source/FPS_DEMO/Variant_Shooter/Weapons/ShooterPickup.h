@@ -11,7 +11,7 @@ class UPrimitiveComponent;
 class AShooterWeapon;
 
 /**
- *  包含有关武器拾取类型的信息
+ *  自建结构体，继承自UE的FTableRowBase，包含有关武器拾取类型的信息
  */
 USTRUCT(BlueprintType)
 struct FWeaponTableRow : public FTableRowBase
